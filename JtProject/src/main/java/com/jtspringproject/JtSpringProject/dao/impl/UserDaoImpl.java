@@ -1,4 +1,4 @@
-package com.jtspringproject.JtSpringProject.dao;
+package com.jtspringproject.JtSpringProject.dao.impl;
 
 import java.util.List;
 
@@ -9,35 +9,55 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jtspringproject.JtSpringProject.dao.DaoImplementor;
 import com.jtspringproject.JtSpringProject.models.User;
 
 @Repository
-public class userDao {
+public class UserDaoImpl implements DaoImplementor<User> {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void setSessionFactory(SessionFactory sf) {
-        this.sessionFactory = sf;
-    }
-
+    @Override
     @Transactional
-    public List<User> getAllUser() {
+    public List<User> findAll() {
         Session session = this.sessionFactory.getCurrentSession();
-        List<User> userList = session.createQuery("from CUSTOMER", User.class).list();
-        return userList;
+        return session.createQuery("from CUSTOMER", User.class).list();
     }
 
+    @Override
     @Transactional
-    public User saveUser(User user) {
-        this.sessionFactory.getCurrentSession().saveOrUpdate(user);
-        System.out.println("User added" + user.getId());
-        return user;
+    public User save(User entity) {
+        this.sessionFactory.getCurrentSession().saveOrUpdate(entity);
+        return entity;
     }
 
-//    public User checkLogin() {
-//    	this.sessionFactory.getCurrentSession().
-//    }
+    @Override
+    @Transactional
+    public User findById(int id) {
+        return this.sessionFactory.getCurrentSession().get(User.class, id);
+    }
+
+    @Override
+    @Transactional
+    public User update(User entity) {
+        this.sessionFactory.getCurrentSession().update(entity);
+        return entity;
+    }
+
+    @Override
+    @Transactional
+    public boolean delete(int id) {
+        Session session = this.sessionFactory.getCurrentSession();
+        Object persistenceInstance = session.load(User.class, id);
+
+        if (persistenceInstance != null) {
+            session.delete(persistenceInstance);
+            return true;
+        }
+        return false;
+    }
+
     @Transactional
     public User getUser(String username, String password) {
         Query<User> query = sessionFactory.getCurrentSession().createQuery("from CUSTOMER where username = :username", User.class);
@@ -45,7 +65,6 @@ public class userDao {
 
         try {
             User user = (User) query.getSingleResult();
-            System.out.println(user.getPassword());
             if (password.equals(user.getPassword())) {
                 return user;
             } else {
@@ -53,10 +72,8 @@ public class userDao {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            User user = new User();
-            return user;
+            return new User();
         }
-
     }
 
     @Transactional

@@ -1,42 +1,36 @@
 package com.jtspringproject.JtSpringProject.services;
 
-import com.jtspringproject.JtSpringProject.models.*;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.jtspringproject.JtSpringProject.dao.userDao;
+import com.jtspringproject.JtSpringProject.dao.impl.UserDaoImpl;
 import com.jtspringproject.JtSpringProject.models.User;
 
 @Service
-public class userService {
-	@Autowired
-	private userDao userDao;
-	
-	public List<User> getUsers(){
-		return this.userDao.getAllUser();
-	}
-	
-	public User addUser(User user) {
-		try {
-			return this.userDao.saveUser(user);
-		} catch (DataIntegrityViolationException e) {
-			// handle unique constraint violation, e.g., by throwing a custom exception
-			throw new RuntimeException("Add user error");
-		}
-	}
-	
-	public User checkLogin(String username,String password) {
-		return this.userDao.getUser(username, password);
-	}
+public class UserService extends AbstractService<User> {
 
-	public boolean checkUserExists(String username) {
-		return this.userDao.userExists(username);
-	}
+    @Autowired
+    private UserDaoImpl userDao;
 
-	public User getUserByUsername(String username) {
-	        return userDao.getUserByUsername(username);
-	    }
+    @Override
+    public User add(User user) {
+        try {
+            return userDao.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new RuntimeException("Add user error");
+        }
+    }
+
+    public User checkLogin(String username, String password) {
+        return userDao.getUser(username, password);
+    }
+
+    public boolean checkUserExists(String username) {
+        return userDao.userExists(username);
+    }
+
+    public User getUserByUsername(String username) {
+        return userDao.getUserByUsername(username);
+    }
 }

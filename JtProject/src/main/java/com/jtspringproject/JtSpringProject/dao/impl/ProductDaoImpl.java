@@ -1,4 +1,4 @@
-package com.jtspringproject.JtSpringProject.dao;
+package com.jtspringproject.JtSpringProject.dao.impl;
 
 import java.util.List;
 
@@ -8,42 +8,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jtspringproject.JtSpringProject.dao.DaoImplementor;
 import com.jtspringproject.JtSpringProject.models.Product;
 
 @Repository
-public class productDao {
+public class ProductDaoImpl implements DaoImplementor<Product> {
 
     @Autowired
     private SessionFactory sessionFactory;
 
-    public void setSessionFactory(SessionFactory sf) {
-        this.sessionFactory = sf;
-    }
-
+    @Override
     @Transactional
-    public List<Product> getProducts() {
+    public List<Product> findAll() {
         return this.sessionFactory.getCurrentSession().createQuery("from PRODUCT", Product.class).list();
     }
 
+    @Override
     @Transactional
-    public Product addProduct(Product product) {
-        this.sessionFactory.getCurrentSession().save(product);
-        return product;
+    public Product save(Product entity) {
+        this.sessionFactory.getCurrentSession().save(entity);
+        return entity;
     }
 
+    @Override
     @Transactional
-    public Product getProduct(int id) {
+    public Product findById(int id) {
         return this.sessionFactory.getCurrentSession().get(Product.class, id);
     }
 
-    public Product updateProduct(Product product) {
-        this.sessionFactory.getCurrentSession().update(String.valueOf(Product.class), product);
-        return product;
+    @Override
+    @Transactional
+    public Product update(Product entity) {
+        this.sessionFactory.getCurrentSession().update(entity);
+        return entity;
     }
 
+    @Override
     @Transactional
-    public Boolean deletProduct(int id) {
-
+    public boolean delete(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         Object persistanceInstance = session.load(Product.class, id);
 
@@ -53,5 +55,4 @@ public class productDao {
         }
         return false;
     }
-
 }
