@@ -1,11 +1,13 @@
 package com.jtspringproject.JtSpringProject.models;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-
-@Entity(name="CART")
+@Entity(name = "CART")
 public class Cart {
 
     @Id
@@ -13,7 +15,7 @@ public class Cart {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name="customer_id")
+    @JoinColumn(name = "customer_id")
     private User customer;
 
 //    @ManyToMany
@@ -22,8 +24,6 @@ public class Cart {
 //            inverseJoinColumns = @JoinColumn(name = "product_id")
 //    )
 //    private List<Product> products;
-
-
     public Cart() {
     }
 
@@ -34,7 +34,6 @@ public class Cart {
     public void setId(int id) {
         this.id = id;
     }
-
 
     public User getCustomer() {
         return customer;
@@ -47,7 +46,6 @@ public class Cart {
 //    public List<Product> getProducts() {
 //        return products;
 //    }
-
 //    public List<Product> getProductsByUser(int customer_id ) {
 //        List<Product> userProducts = new ArrayList<Product>();
 //        for (Product product : products) {
@@ -57,11 +55,9 @@ public class Cart {
 //        }
 //        return userProducts;
 //    }
-
 //    public void setProducts(List<Product> products) {
 //        this.products = products;
 //    }
-
 //    public void addProduct(Product product) {
 //        products.add(product);
 //    }

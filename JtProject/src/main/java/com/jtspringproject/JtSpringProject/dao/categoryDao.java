@@ -12,50 +12,51 @@ import com.jtspringproject.JtSpringProject.models.Category;
 
 @Repository
 public class categoryDao {
-	@Autowired
-	private SessionFactory sessionFactory;
 
-	public void setSessionFactory(SessionFactory sf) {
-		this.sessionFactory = sf;
-	}
+    @Autowired
+    private SessionFactory sessionFactory;
 
-	@Transactional
-	public Category addCategory(String name) {
-		Category category = new Category();
-		category.setName(name);
-		this.sessionFactory.getCurrentSession().saveOrUpdate(category);
-		return category;
-	}
+    public void setSessionFactory(SessionFactory sf) {
+        this.sessionFactory = sf;
+    }
 
-	@Transactional
-	public List<Category> getCategories() {
-		return this.sessionFactory.getCurrentSession().createQuery("from CATEGORY").list();
-	}
+    @Transactional
+    public Category addCategory(String name) {
+        Category category = new Category();
+        category.setName(name);
+        this.sessionFactory.getCurrentSession().saveOrUpdate(category);
+        return category;
+    }
 
-	@Transactional
-	public Boolean deletCategory(int id) {
+    @Transactional
+    public List<Category> getCategories() {
+        return this.sessionFactory.getCurrentSession().createQuery("from CATEGORY", Category.class).list();
+    }
 
-		Session session = this.sessionFactory.getCurrentSession();
-		Object persistanceInstance = session.load(Category.class, id);
+    @Transactional
+    public Boolean deletCategory(int id) {
 
-		if (persistanceInstance != null) {
-			session.delete(persistanceInstance);
-			return true;
-		}
-		return false;
-	}
+        Session session = this.sessionFactory.getCurrentSession();
+        Object persistanceInstance = session.load(Category.class, id);
 
-	@Transactional
-	public Category updateCategory(int id, String name) {
-		Category category = this.sessionFactory.getCurrentSession().get(Category.class, id);
-		category.setName(name);
+        if (persistanceInstance != null) {
+            session.delete(persistanceInstance);
+            return true;
+        }
+        return false;
+    }
 
-		this.sessionFactory.getCurrentSession().update(category);
-		return category;
-	}
+    @Transactional
+    public Category updateCategory(int id, String name) {
+        Category category = this.sessionFactory.getCurrentSession().get(Category.class, id);
+        category.setName(name);
 
-	@Transactional
-	public Category getCategory(int id) {
-		return this.sessionFactory.getCurrentSession().get(Category.class,id);
-	}
+        this.sessionFactory.getCurrentSession().update(category);
+        return category;
+    }
+
+    @Transactional
+    public Category getCategory(int id) {
+        return this.sessionFactory.getCurrentSession().get(Category.class, id);
+    }
 }

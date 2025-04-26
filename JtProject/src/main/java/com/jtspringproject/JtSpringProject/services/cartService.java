@@ -1,15 +1,16 @@
 package com.jtspringproject.JtSpringProject.services;
 
-import com.jtspringproject.JtSpringProject.dao.cartDao;
-import com.jtspringproject.JtSpringProject.models.Cart;
-import com.jtspringproject.JtSpringProject.models.Category;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.jtspringproject.JtSpringProject.dao.cartDao;
+import com.jtspringproject.JtSpringProject.models.Cart;
 
 @Service
 public class cartService {
+
     @Autowired
     private cartDao cartDao;
 
@@ -36,6 +37,4 @@ public class cartService {
 //    pubiic List<Cart> getCartByUserId(int customer_id){
 //        return cartDao.getCartsByCustomerID(customer_id);
 //    }
-
-
 }
