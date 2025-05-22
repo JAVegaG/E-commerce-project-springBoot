@@ -20,33 +20,36 @@ public class productDao {
         this.sessionFactory = sf;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Product> getProducts() {
-        return this.sessionFactory.getCurrentSession().createQuery("from PRODUCT", Product.class).list();
+        Session session = this.sessionFactory.getCurrentSession();
+        return session.createQuery("from PRODUCT", Product.class).list();
     }
 
     @Transactional
     public Product addProduct(Product product) {
-        this.sessionFactory.getCurrentSession().save(product);
+        Session session = this.sessionFactory.getCurrentSession();
+        session.save(product);
         return product;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Product getProduct(int id) {
-        return this.sessionFactory.getCurrentSession().get(Product.class, id);
+        Session session = this.sessionFactory.getCurrentSession();
+        return session.get(Product.class, id);
     }
 
+    @Transactional
     public Product updateProduct(Product product) {
-        this.sessionFactory.getCurrentSession().update(String.valueOf(Product.class), product);
+        Session session = this.sessionFactory.getCurrentSession();
+        session.merge(product);
         return product;
     }
 
     @Transactional
     public Boolean deletProduct(int id) {
-
         Session session = this.sessionFactory.getCurrentSession();
-        Object persistanceInstance = session.load(Product.class, id);
-
+        Object persistanceInstance = session.get(Product.class, id); // Usar get es mejor que load si no estás seguro que existe
         if (persistanceInstance != null) {
             session.delete(persistanceInstance);
             return true;
